@@ -10,7 +10,91 @@ const { choices } = require('yargs')
 
 const teamArray = []
 
-const addEmployee= () => {
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'role',
+            message: 'What kind of employee would you like to add?',
+            choices: ['Intern', 'Engineer']
+        },
+        {
+            type: 'input',
+            name: 'name',
+            message: "What is your employee's name?",
+            validate: employeeInput => {
+                if (employeeInput) {
+                    return true
+                }
+                else {
+                    console.log("You must input your employee's information.")
+                    return false
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'id',
+            message: "What is your employee's employeeid?",
+            validate: employeeIdInput => {
+                if (employeeIdInput) {
+                    return true
+                }
+                else {
+                    console.log("You must input your employee's information.")
+                    return false
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'email',
+            message: "What is your employee's email?",
+            validate: employeeEmailInput => {
+                if (employeeEmailInput) {
+                    return true
+                }
+                else {
+                    console.log("You must input your employee's information.")
+                    return false
+                }
+            }
+        }]).then(({ role }) => {
+            if (role === 'Engineer' || role ==='Intern') {
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'GitHub',
+                    message: "What is your engineer's GitHub username?",
+                    when: (role) => role === 'Engineer',
+                    validate: engineerGitHub => {
+                        if (engineerGitHub) {
+                            return true
+                        }
+                        else {
+                            console.log('You must input their GitHub username.')
+                        }
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'school',
+                    message: "Where does your intern go to school?",
+                    when: (role) => role === 'Intern',
+                    validate: internSchool => {
+                        if (internSchool) {
+                            return true
+                        }
+                        else {
+                            console.log('You must input their school.')
+                        }
+                    }
+                }
+            ])
+        }
+        })
+        //     let { role, name, }
+        // })
 
 }
 
@@ -64,7 +148,7 @@ function addManager() {
             message: "What is your team manager's office number?",
             validate: managerOfficeInput => {
                 //must be number
-                if (managerOfficeInput) {
+                if (isNan(managerOfficeInput)) {
                     return true
                 }
                 else {
@@ -78,21 +162,20 @@ function addManager() {
             name: 'confirmAdd',
             message: 'Would you like to add another employee?',
             default: true, // if yes, then return list
-        }]).then(managerData=> {
-            const [{name}, {id}, {email}, {office}] = managerData
-            const manager =new Manager(name,id, email, office)
+        }]).then(managerData => {
+            const { name ,  id , email ,  office } = managerData
+            const manager = new Manager(name, id, email, office)
             teamArray.push(manager)
-            if(managerData.confirmAdd){
-              // make list and launch prompt
-              //prompt will ask again
-              // if no, end loop
-              // if yes, start again
-              addEmployee()
+            if (managerData.confirmAdd) {
+                // make list and launch prompt
+                //prompt will ask again
+                // if no, end loop
+                // if yes, start again
+                addEmployee()
             }
             else {
-                return teamArray
+                return writeFile(teamArray)
                 //write file
-
             }
         })
 }// separate team loop list into different inquirer prompt
@@ -107,12 +190,23 @@ function addManager() {
 //copy to dist
 
 
+function writeFile() {
+    // generatepage 
+}
+function copyFile() {
 
-
+}
 
 
 addManager()
-.then(addEmployee)
-.then(teamArray => {
-    return generatePage(teamArray)
-}).then(//html, write html)
+    // .then(addEmployee)
+    // .then(teamArray => {
+    //     return generatePage(teamArray)
+    // }).then(pageHTML => {
+    //     return writeFile(pageHTML)
+    // }).then(writeFileResponse => {
+    //     console.log(writeFileResponse)
+    //     return copyFile()
+    // }).catch(err => {
+    //     console.log(err)
+    // })
