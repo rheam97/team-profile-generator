@@ -193,10 +193,6 @@ const addEmployee = () => {
 function writeFile() {
     // generatepage 
 }
-function copyFile() {
-
-}
-
 
 addManager()
     .then(addEmployee)
