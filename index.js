@@ -1,4 +1,3 @@
-// how to use mocks here?
 const inquirer = require('inquirer')
 inquirer.registerPrompt("loop", require("inquirer-loop")(inquirer))
 const generatePage = require('./src/template')
@@ -10,8 +9,82 @@ const { choices } = require('yargs')
 
 const teamArray = []
 
+function addManager() {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: "What is your team manager's name?",
+            validate: managerInput => {
+                if (managerInput) {
+                    return true
+                }
+                else {
+                    console.log("You must input your manager's information.")
+                    return false
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'id',
+            message: "What is your team manager's employeeid?",
+            validate: managerIdInput => {
+                if (managerIdInput) {
+                    return true
+                }
+                else {
+                    console.log("You must input your manager's information.")
+                    return false
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'email',
+            message: "What is your team manager's email?",
+            validate: managerEmailInput => {
+                if (managerEmailInput) {
+                    return true
+                }
+                else {
+                    console.log("You must input your manager's information.")
+                    return false
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'officeNumber',
+            message: "What is your team manager's office number?",
+            validate: managerOfficeInput => {
+                //must be number
+                if (isNaN(managerOfficeInput)) {
+                    console.log("You must input your manager's information.")
+                    return false
+                }
+                else {
+                    return true
+                }
+            }
+        },
+    ]).then(managerData => {
+        const { name, id, email, officeNumber } = managerData
+        const manager = new Manager(name, id, email, officeNumber)
+        teamArray.push(manager)
+    })
+}// separate team loop list into different inquirer prompt
+// if yes data.employees.options and then launch other prompts
+// array = [{engineer}, {manager}, {engineer}, {intern}]
+// const engineer = new Engineer(name, id, email, github)
+//add variables to team array 
+//if they answer no, then i make these files
+// if yes, restart prompts
+// put data into page html
+//write page html file
+//copy to dist
 const addEmployee = () => {
-    inquirer.prompt([
+    return inquirer.prompt([
         {
             type: 'list',
             name: 'role',
@@ -59,136 +132,63 @@ const addEmployee = () => {
                     return false
                 }
             }
-        }]).then(({ role }) => {
-            if (role === 'Engineer' || role ==='Intern') {
-            inquirer.prompt([
-                {
-                    type: 'input',
-                    name: 'GitHub',
-                    message: "What is your engineer's GitHub username?",
-                    when: (role) => role === 'Engineer',
-                    validate: engineerGitHub => {
-                        if (engineerGitHub) {
-                            return true
-                        }
-                        else {
-                            console.log('You must input their GitHub username.')
-                        }
-                    }
-                },
-                {
-                    type: 'input',
-                    name: 'school',
-                    message: "Where does your intern go to school?",
-                    when: (role) => role === 'Intern',
-                    validate: internSchool => {
-                        if (internSchool) {
-                            return true
-                        }
-                        else {
-                            console.log('You must input their school.')
-                        }
-                    }
+        },
+        {
+            type: 'input',
+            name: 'gitHub',
+            message: "What is your employee's email?",
+            when: data => data.role === 'Engineer',
+            validate: engineerInput => {
+                if (engineerInput) {
+                    return true
                 }
-            ])
-        }
-        })
-        //     let { role, name, }
-        // })
+                else {
+                    console.log("You must input your employee's information.")
+                    return false
+                }
+            }
 
-}
+        },
+        {
+            type: 'input',
+            name: 'school',
+            message: "What school does your intern attend?",
+            when: data => data.role === 'Intern',
+            validate: schoolInput => {
+                if (schoolInput) {
+                    return true
+                }
+                else {
+                    console.log("You must input your employee's information.")
+                    return false
+                }
+            }
 
-function addManager() {
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'name',
-            message: "What is your team manager's name?",
-            validate: managerInput => {
-                if (managerInput) {
-                    return true
-                }
-                else {
-                    console.log("You must input your manager's information.")
-                    return false
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'id',
-            message: "What is your team manager's employeeid?",
-            validate: managerIdInput => {
-                if (managerIdInput) {
-                    return true
-                }
-                else {
-                    console.log("You must input your manager's information.")
-                    return false
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'email',
-            message: "What is your team manager's email?",
-            validate: managerEmailInput => {
-                if (managerEmailInput) {
-                    return true
-                }
-                else {
-                    console.log("You must input your manager's information.")
-                    return false
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'office',
-            message: "What is your team manager's office number?",
-            validate: managerOfficeInput => {
-                //must be number
-                if (isNan(managerOfficeInput)) {
-                    return true
-                }
-                else {
-                    console.log("You must input your manager's information.")
-                    return false
-                }
-            }
         },
         {
             type: 'confirm',
-            name: 'confirmAdd',
+            name: 'another',
             message: 'Would you like to add another employee?',
-            default: true, // if yes, then return list
-        }]).then(managerData => {
-            const { name ,  id , email ,  office } = managerData
-            const manager = new Manager(name, id, email, office)
-            teamArray.push(manager)
-            if (managerData.confirmAdd) {
-                // make list and launch prompt
-                //prompt will ask again
-                // if no, end loop
-                // if yes, start again
+            default: true
+        }]).then(employeeData => {
+            let newEmployee;
+            const { role, name, id, email, gitHub, school, another } = employeeData
+            if (role === 'Engineer') {
+                newEmployee = new Engineer(name, id, email, gitHub)
+            }
+            else if (role === 'Intern') {
+                newEmployee = new Intern(name, id, email, school)
+            }
+            teamArray.push(newEmployee)
+            if(another){
                 addEmployee()
             }
-            else {
-                return writeFile(teamArray)
-                //write file
+            else{
+                console.log(teamArray)
+                return teamArray
             }
         })
-}// separate team loop list into different inquirer prompt
-// if yes data.employees.options and then launch other prompts
-// array = [{engineer}, {manager}, {engineer}, {intern}]
-// const engineer = new Engineer(name, id, email, github)
-//add variables to team array 
-//if they answer no, then i make these files
-// if yes, restart prompts
-// put data into page html
-//write page html file
-//copy to dist
-
+}
 
 function writeFile() {
     // generatepage 
@@ -199,12 +199,13 @@ function copyFile() {
 
 
 addManager()
-    // .then(addEmployee)
-    // .then(teamArray => {
-    //     return generatePage(teamArray)
-    // }).then(pageHTML => {
-    //     return writeFile(pageHTML)
-    // }).then(writeFileResponse => {
+    .then(addEmployee)
+    .then(teamArray => {
+        return generatePage(teamArray)
+    }).then(pageHTML => {
+        return writeFile(pageHTML)
+    })
+//.then(writeFileResponse => {
     //     console.log(writeFileResponse)
     //     return copyFile()
     // }).catch(err => {
