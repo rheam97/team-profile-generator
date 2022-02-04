@@ -21,9 +21,10 @@
 
   <a name="usage"></a>
   ## Usage
-    After inputting the launch command, answer the prompts and look in the dist folder for the finished html.
 
-    Here is a [video](https://drive.google.com/file/d/1zuQ3qTkARZ_3i02Y_ND96JVL5IgvfARP/view) showing how the app functions.
+After inputting the launch command, answer the prompts and look in the dist folder for the finished html.
+
+Here is a [video](https://drive.google.com/file/d/1zuQ3qTkARZ_3i02Y_ND96JVL5IgvfARP/view) showing how the app functions.
 
   <a name="license"></a>
     
