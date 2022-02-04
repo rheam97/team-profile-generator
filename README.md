@@ -1,19 +1,43 @@
-# team-profile-generator
+  # team-profile generator
 
-GIVEN a command-line application that accepts user input
-WHEN I am prompted for my team members and their information
-THEN an HTML file is generated that displays a nicely formatted team roster based on user input
-WHEN I click on an email address in the HTML
-THEN my default email program opens and populates the TO field of the email with the address
-WHEN I click on the GitHub username
-THEN that GitHub profile opens in a new tab
-WHEN I start the application
-THEN I am prompted to enter the team manager’s name, employee ID, email address, and office number
-WHEN I enter the team manager’s name, employee ID, email address, and office number
-THEN I am presented with a menu with the option to add an engineer or an intern or to finish building my team
-WHEN I select the engineer option
-THEN I am prompted to enter the engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
-WHEN I select the intern option
-THEN I am prompted to enter the intern’s name, ID, email, and school, and I am taken back to the menu
-WHEN I decide to finish building my team
-THEN I exit the application, and the HTML is generated
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+  # Table of Contents
+  * [Project Description](#description)
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [Contribution Guidelines](#contribution-guidelines)
+  * [Licensing](#license)
+  * [Testing Instructions](#testing-instructions)
+  * [Questions](#questions)
+  
+  <a name="description"></a>
+  ## Description
+  A site generator which takes in user input on team data and writes  individualized cards for them automatically on a html page.
+
+  <a name="install"></a>
+  ## Installation
+  Clone the application from GitHub and make sure to 'npm i' to install the inquirer prompts. Then launch them using 'node index.js' in the command line.
+
+  <a name="usage"></a>
+  ## Usage
+    After inputting the launch command, answer the prompts and look in the dist folder for the finished html.
+
+    Here is a [video](https://drive.google.com/file/d/1zuQ3qTkARZ_3i02Y_ND96JVL5IgvfARP/view) showing how the app functions.
+
+  <a name="license"></a>
+    
+## Licensing
+  This app is licensed under MIT. For more information, click on the badge link above.
+
+  <a name="testing"></a>
+
+  ## Testing Instructions
+  Install jest using 'npm i jest --save-dev' and run tests using 'npm run test'
+
+  <a name="questions"></a>
+
+  ## Questions
+  You can find more of my work at [rheam97](https://github.com/rheam97)
+  on GitHub and contact me with any questions
+  at rheam97@gmail.com.

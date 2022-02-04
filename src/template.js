@@ -28,7 +28,7 @@ function renderCards(data){
                 <div class="card-body">
                     <p class="id">ID: ${employee.getId()}</p>
                     <p class="email">Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</a></p>
-                    <p class="gitHub">GitHub: ${employee.getGithub()}</p>
+                    <p class="gitHub">GitHub: ${employee.getGitHub()}</p>
                </div>
            </div>
          </div>`

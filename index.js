@@ -129,7 +129,7 @@ const addEmployee = () => {
         {
             type: 'input',
             name: 'gitHub',
-            message: "What is your employee's email?",
+            message: "What is your employee's GitHub?",
             when: data => data.role === 'Engineer',
             validate: engineerInput => {
                 if (engineerInput) {
