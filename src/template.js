@@ -1,3 +1,4 @@
+// render employee cards based on data input by mapping onto card array
 function renderCards(data){
     return data.map((employee)=> {
         let job = employee.getRole()
@@ -26,7 +27,7 @@ function renderCards(data){
                </div>
                 <div class="card-body">
                     <p class="id">ID: ${employee.getId()}</p>
-                    <p class="email">Email: <a href="mailto:${employee.getEmail()}">${manager.getEmail()}</a></p>
+                    <p class="email">Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</a></p>
                     <p class="gitHub">GitHub: ${employee.getGithub()}</p>
                </div>
            </div>
@@ -50,7 +51,7 @@ function renderCards(data){
        }
     }
     )}
-
+// page template imports to write file on index
 function generatePage(data){
 return `<!DOCTYPE html>
 <html lang="en">
@@ -86,4 +87,4 @@ return `<!DOCTYPE html>
       `
 }
 
-module.exports= { generatePage, renderCards}
+module.exports= { generatePage}

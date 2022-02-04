@@ -1,15 +1,15 @@
 const inquirer = require('inquirer')
 inquirer.registerPrompt("loop", require("inquirer-loop")(inquirer))
-const { generatePage, renderCards} = require('./src/template')
+const { generatePage} = require('./src/template')
 const Engineer = require('./lib/Engineer')
 const Intern = require('./lib/Intern')
 const Manager = require('./lib/Manager')
 const fs = require('fs')
-const { choices } = require('yargs')
-const { Console } = require('console')
 
+
+//empty team array so that file can be refreshed with new input
 const teamArray = []
-
+//first add manager
 function addManager() {
     return inquirer.prompt([
         {
@@ -69,12 +69,13 @@ function addManager() {
                 }
             }
         },
-    ]).then(managerData => {
+    ]).then(managerData => { // create manager object with inputs and push to array
         const { name, id, email, officeNumber } = managerData
         const manager = new Manager(name, id, email, officeNumber)
         teamArray.push(manager)
     })
 }
+// then add employee by type 
 const addEmployee = () => {
     return inquirer.prompt([
         {
@@ -141,7 +142,7 @@ const addEmployee = () => {
             }
 
         },
-        {
+        { // conditional iputs for intern or engineer
             type: 'input',
             name: 'school',
             message: "What school does your intern attend?",
@@ -163,7 +164,7 @@ const addEmployee = () => {
             message: 'Would you like to add another employee?',
             default: false
         }]).then(employeeData => {
-            let newEmployee;
+            let newEmployee; // push employee objects into team array 
             const { role, name, id, email, gitHub, school, another } = employeeData
             if (role === 'Engineer') {
                 newEmployee = new Engineer(name, id, email, gitHub)
@@ -172,16 +173,16 @@ const addEmployee = () => {
                 newEmployee = new Intern(name, id, email, school)
             }
             teamArray.push(newEmployee)
-            if(another){
+            if(another){ // if another is wanted, restart
                 return addEmployee(teamArray)
             }
-            else{
+            else{ // pass this into generatePage
                 console.log(teamArray)
                 return teamArray
             }
         })
 }
-
+//  user template from generatePage to write into dist
 function writeFile(pageHTML) {
     fs.writeFile('./dist/team.html', pageHTML, err=> {
         if(err){
