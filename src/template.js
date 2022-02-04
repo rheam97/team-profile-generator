@@ -1,34 +1,57 @@
 function renderCards(data){
-for (let i=0; i<data.length; i++){
-    let employee =data[i]
-    let job =employee.getRole()// make first letter lower case
-    return `
-    <div class="col-4 mt-4">
-        <div class="card h-100">
-            <div class="card-header">
-                <h3>${job.name}</h3>
-                <h4>${job}</h4><i class="material-icons">content_paste</i>
+    return data.map((employee)=> {
+        let job = employee.getRole()
+        if(job === 'Manager') {
+            return `<div class="col-4 mt-4">
+            <div class="card h-100">
+                <div class="card-header">
+                   <h3>${employee.getName()}</h3>
+                    <h4>${job}</h4><i class="material-icons">content_paste</i>
+                </div>
+                 <div class="card-body">
+                     <p class="id">ID: ${employee.getId()}</p>
+                     <p class="email">Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</a></p>
+                     <p class="office">OfficeNumber: ${employee.officeNumber}</p>
+                </div>
             </div>
-            <div class="card-body">
-                <p class="id">ID: ${job.id}</p>
-                <p class="email">Email: <a href="mailto:${job.email}">${job.email}</a></p>
-                ${moreInfo(job)}
-            </div>
-        </div>
-    </div>
-    `
-}
-function moreInfo(job){
-    if(job==='Engineer'){
-        return `<p class="github">Github: <a href="https://github.com/${engineer.getGitHub()}">${job.getGitHub()}</a></p>`
+          </div>
+          `
+       }
+       else if (job ==='Engineer'){
+           return `<div class="col-4 mt-4">
+           <div class="card h-100">
+               <div class="card-header">
+                  <h3>${employee.getName()}</h3>
+                   <h4>${job}</h4><i class="material-icons">content_paste</i>
+               </div>
+                <div class="card-body">
+                    <p class="id">ID: ${employee.getId()}</p>
+                    <p class="email">Email: <a href="mailto:${employee.getEmail()}">${manager.getEmail()}</a></p>
+                    <p class="gitHub">GitHub: ${employee.getGithub()}</p>
+               </div>
+           </div>
+         </div>`
+       }
+       else {
+           return `<div class="col-4 mt-4">
+           <div class="card h-100">
+               <div class="card-header">
+                  <h3>${employee.getName()}</h3>
+                   <h4>${job}</h4><i class="material-icons">content_paste</i>
+               </div>
+                <div class="card-body">
+                    <p class="id">ID: ${employee.getId()}</p>
+                    <p class="email">Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</a></p>
+                    <p class="school">School: ${employee.getSchool()}</p>
+               </div>
+           </div>
+         </div>`
+           
+       }
     }
-    else if( job=== 'Intern'){
-        return `<p class="school">School: ${intern.getSchool()}</p>`
-    }
-}
-}
-function generatePage(data){
+    )}
 
+function generatePage(data){
 return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +78,6 @@ return `<!DOCTYPE html>
                 </div>
                 </div>
             </main>
-            
         </body>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -64,5 +86,4 @@ return `<!DOCTYPE html>
       `
 }
 
-module.exports= generatePage
-//what if you use append file for cards instead of write file
+module.exports= { generatePage, renderCards}

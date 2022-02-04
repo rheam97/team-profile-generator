@@ -1,11 +1,12 @@
 const inquirer = require('inquirer')
 inquirer.registerPrompt("loop", require("inquirer-loop")(inquirer))
-const generatePage = require('./src/template')
+const { generatePage, renderCards} = require('./src/template')
 const Engineer = require('./lib/Engineer')
 const Intern = require('./lib/Intern')
 const Manager = require('./lib/Manager')
 const fs = require('fs')
 const { choices } = require('yargs')
+const { Console } = require('console')
 
 const teamArray = []
 
@@ -73,16 +74,7 @@ function addManager() {
         const manager = new Manager(name, id, email, officeNumber)
         teamArray.push(manager)
     })
-}// separate team loop list into different inquirer prompt
-// if yes data.employees.options and then launch other prompts
-// array = [{engineer}, {manager}, {engineer}, {intern}]
-// const engineer = new Engineer(name, id, email, github)
-//add variables to team array 
-//if they answer no, then i make these files
-// if yes, restart prompts
-// put data into page html
-//write page html file
-//copy to dist
+}
 const addEmployee = () => {
     return inquirer.prompt([
         {
@@ -169,7 +161,7 @@ const addEmployee = () => {
             type: 'confirm',
             name: 'another',
             message: 'Would you like to add another employee?',
-            default: true
+            default: false
         }]).then(employeeData => {
             let newEmployee;
             const { role, name, id, email, gitHub, school, another } = employeeData
@@ -181,7 +173,7 @@ const addEmployee = () => {
             }
             teamArray.push(newEmployee)
             if(another){
-                addEmployee()
+                return addEmployee(teamArray)
             }
             else{
                 console.log(teamArray)
@@ -190,9 +182,17 @@ const addEmployee = () => {
         })
 }
 
-function writeFile() {
-    // generatepage 
+function writeFile(pageHTML) {
+    fs.writeFile('./dist/team.html', pageHTML, err=> {
+        if(err){
+            console.log(err)
+        }
+        else{
+            console.log('Team page created!')
+        }
+    })
 }
+
 
 addManager()
     .then(addEmployee)
@@ -200,10 +200,7 @@ addManager()
         return generatePage(teamArray)
     }).then(pageHTML => {
         return writeFile(pageHTML)
+    }).catch(err=> {
+        console.log(err)
     })
-//.then(writeFileResponse => {
-    //     console.log(writeFileResponse)
-    //     return copyFile()
-    // }).catch(err => {
-    //     console.log(err)
-    // })
+
